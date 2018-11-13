@@ -1,0 +1,23 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+jobs:
+- job: Build
+  timeoutInMinutes: 0
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - script: |
+      free -h
+      df -h
+      echo $BUILD_SOURCEBRANCH
+      if [[ "$BUILD_SOURCEBRANCH" != "refs/tags/"* ]]; then exit 0; fi
+      GIT_TAG=${BUILD_SOURCEBRANCH#"refs/tags/"}
+      mkdir -p artifacts
+      echo "test" > artifacts/out.ogv
+      ls -lah .
+      docker run -v `pwd`:/mnt golang:1.11.2 bash -x -c "cd /mnt; go get github.com/tcnksm/ghr ; ghr -t ${GITHUB_TOKEN} -u $(echo $BUILD_REPOSITORY_NAME | cut -f1 -d/) -r $(echo $BUILD_REPOSITORY_NAME | cut -f2 -d/) -c ${BUILD_SOURCEVERSION} -delete ${GIT_TAG} ./artifacts/"
+    displayName: 'Run a multi-line script'
+
