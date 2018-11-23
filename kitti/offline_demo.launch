@@ -1,0 +1,19 @@
+<launch>
+  <arg name="bag_filenames"/>
+  <arg name="no_rviz" default="false"/>
+  <arg name="rviz_config" default="$(env PWD)/viz.rviz"/>
+  <arg name="configuration_directory" default="$(env PWD)"/>
+  <arg name="configuration_basenames" default="backpack_3d.lua"/>
+  <arg name="launch_prefix" default=""/>
+
+  <remap from="points2" to="/kitti/velo/pointcloud" />
+  <remap from="imu" to="/kitti/oxts/imu" />
+  <include file="$(env PWD)/offline_node.launch">
+    <arg name="bag_filenames" value="$(arg bag_filenames)"/>
+    <arg name="no_rviz" value="$(arg no_rviz)"/>
+    <arg name="rviz_config" value="$(arg rviz_config)"/>
+    <arg name="configuration_directory" value="$(arg configuration_directory)"/>
+    <arg name="configuration_basenames" value="$(arg configuration_basenames)"/>
+    <arg name="launch_prefix" value="$(arg launch_prefix)"/>
+  </include>
+</launch>
