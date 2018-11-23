@@ -11,12 +11,12 @@ jobs:
   steps:
   - script: |
       docker pull osrf/ros:melodic-desktop-full
-      docker run -v `pwd`:/mnt osrf/ros:melodic-desktop-full bash -c "cd /mnt;./exec_offline-2d.sh"
+      docker run -v `pwd`:/mnt osrf/ros:melodic-desktop-full bash -c "cd /mnt;./kitti/exec_offline-3d.sh"
       ls -lah .
       if [[ "$BUILD_SOURCEBRANCH" != "refs/tags/"* ]]; then exit 0; fi
       GIT_TAG=${BUILD_SOURCEBRANCH#"refs/tags/"}
       mkdir -p artifacts
-      mv -f out*.ogv artifacts/
+      mv -f kitti/out*.ogv artifacts/
       docker run -v `pwd`:/mnt golang:1.11.2 bash -x -c "cd /mnt; go get github.com/tcnksm/ghr ; ghr -t ${GITHUB_TOKEN} -u $(echo $BUILD_REPOSITORY_NAME | cut -f1 -d/) -r $(echo $BUILD_REPOSITORY_NAME | cut -f2 -d/) -c ${BUILD_SOURCEVERSION} -delete ${GIT_TAG} ./artifacts/"
     displayName: 'Run a multi-line script'
 
