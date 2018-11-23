@@ -218,11 +218,11 @@ Visualization Manager:
         Value: false
       Name: Current View
       Near Clip Distance: 0.01
-      Scale: 2.5
+      Scale: 0.6
       Target Frame: imu_link
       Value: TopDownOrtho (rviz)
-      X: 0
-      Y: 0
+      X: 420
+      Y: 70
     Saved: ~
 Window Geometry:
   Displays:
