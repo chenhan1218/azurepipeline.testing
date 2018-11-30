@@ -1,0 +1,28 @@
+<launch>
+  <param name="/use_sim_time" value="true" />
+
+  <node name="rviz" pkg="rviz" type="rviz" required="true"
+      args="-d $(arg rviz_config)" />
+
+  <param name="robot_description"
+    textfile="gpal.urdf" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+    type="robot_state_publisher" />
+
+  <node name="cartographer_node" pkg="cartographer_ros"
+      required="true"
+      type="cartographer_node" args="
+          -configuration_directory $(env PWD)
+          -configuration_basename backpack_3d.lua"
+      output="screen">
+    <remap from="points2" to="/points_raw" />
+    <remap from="imu" to="/imu/data" />
+  </node>
+
+  <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+      type="cartographer_occupancy_grid_node" args="-resolution 0.2" />
+
+  <node pkg="rosbag" type="play" name="player" args="--clock $(arg bag_filename)" />
+
+</launch>
